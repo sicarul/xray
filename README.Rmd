@@ -1,0 +1,68 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# xray
+
+The R Package to have X Ray vision on your datasets. This package lets you analyze the variables of a dataset, to evaluate how is the shape of your data. Consider this the first step when you have your data for modeling, you can use this package to analyze all variables and check if there is anything weird worth transforming or even avoiding the variable altogether.
+
+
+## Installation
+
+You can install xray from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("sicarul/xray")
+```
+
+
+## Usage
+
+### Anomaly detection
+
+`xray::anomalies` analyzes all your columns for anomalies, whether they are NAs, Zeroes, Infinite, etc, and warns you if it detects variables with at least 80% of rows with those anomalies. It also warns you when all rows have the same value.
+
+Example:
+
+
+```{r example-anomalies}
+data(longley)
+badLongley=longley
+badLongley$GNP=NA
+xray::anomalies(badLongley)
+```
+
+### Distributions
+
+`xray::distributions` tries to analyze the distribution of your variables, so you can understand how each variable is statistically structured. It also returns a percentiles table of numeric variables as a result, which can inform you of the shape of the data.
+
+```{r example-distributions}
+distrLongley=longley
+distrLongley$testCategorical=c(rep('One',7), rep('Two', 9))
+xray::distributions(distrLongley)
+```
+
+### Distributions along a time axis
+
+
+```{r example-timebased}
+dateLongley=longley
+dateLongley$Year=as.Date(paste0(dateLongley$Year,'-01-01'))
+dateLongley$Data='Original'
+ndateLongley=dateLongley
+ndateLongley$GNP=dateLongley$GNP+10
+ndateLongley$Data='Offseted'
+xray::timebased(rbind(dateLongley, ndateLongley), 'Year')
+```
+

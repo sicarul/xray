@@ -1,6 +1,6 @@
 Package: xray
 Type: Package
-Title: X-Ray - Dataset Analyzer
+Title: The R Package to have X Ray vision on your datasets
 Version: 0.1
 Authors@R: person("Pablo", "Seibelt", email = "pabloseibelt@sicarul.com",
   role = c("aut", "cre"))
