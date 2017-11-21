@@ -1,11 +1,11 @@
 Package: xray
 Type: Package
-Title: The R Package to have X Ray vision on your datasets
+Title: The R Package to Have X Ray Vision on your Datasets
 Version: 0.1
 Authors@R: person("Pablo", "Seibelt", email = "pabloseibelt@sicarul.com",
   role = c("aut", "cre"))
-Mantainers@R: person("Pablo", "Seibelt", email = "pabloseibelt@sicarul.com",
-    role = c("aut", "cre"))
+URL: https://github.com/sicarul/xray/
+BugReports: https://github.com/sicarul/xray/issues
 Depends:
     R (>= 3.4.0)
 Imports:

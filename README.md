@@ -68,7 +68,7 @@ distrLongley$testCategorical=c(rep('One',7), rep('Two', 9))
 xray::distributions(distrLongley)
 ```
 
-![](README-example-distributions-1.png)![](README-example-distributions-2.png)
+![](tools/README-example-distributions-1.png)![](tools/README-example-distributions-2.png)
 
     #>       Variable      p_1     p_10     p_25     p_50     p_75    p_90
     #> 1 GNP.deflator    83.78    88.35   94.525    100.6   111.25  114.95
@@ -101,6 +101,6 @@ ndateLongley$Data='Offseted'
 xray::timebased(rbind(dateLongley, ndateLongley), 'Year')
 ```
 
-![](README-example-timebased-1.png)![](README-example-timebased-2.png)
+![](tools/README-example-timebased-1.png)![](tools/README-example-timebased-2.png)
 
     #> [1] "7 charts have been generated."
