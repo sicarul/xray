@@ -1,0 +1,22 @@
+Package: xray
+Type: Package
+Title: X-Ray - Dataset Analyzer
+Version: 0.1
+Authors@R: person("Pablo", "Seibelt", email = "pabloseibelt@sicarul.com",
+  role = c("aut", "cre"))
+Mantainers@R: person("Pablo", "Seibelt", email = "pabloseibelt@sicarul.com",
+    role = c("aut", "cre"))
+Depends:
+    R (>= 3.4.0)
+Imports:
+    dplyr,
+    scales,
+    foreach,
+    ggplot2,
+    grid,
+    lubridate
+Description: Tools to analyze datasets previous to any statistical modeling.
+    Has various functions designed to find inconsistencies and understanding the distribution of the data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 6.0.1
