@@ -89,6 +89,8 @@ xray::distributions(distrLongley)
 
 ### Distributions along a time axis
 
+`xray::timebased` also investigates into your distributions, but shows you the change over time, so if there is any change in the distribution over time (For example a variable stops or starts being collected) you can easily visualize it.
+
 ``` r
 dateLongley=longley
 dateLongley$Year=as.Date(paste0(dateLongley$Year,'-01-01'))
