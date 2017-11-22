@@ -14,14 +14,18 @@ anomalies(data_analyze, anomaly_threshold = 0.8, distinct_threshold = 2)
 \item{distinct_threshold}{the minimum amount of distinct values the column has to have to not be problematic, usually you want to keep this at it's default value.}
 }
 \description{
-If any anomalous columns are found, they are reported as a warning and returned in a data.frame. The anomalies we try to detect are high percentages of:
+If any anomalous columns are found, they are reported as a warning and returned in a data.frame. To interpret the output, we are getting these anomalies:
 \itemize{
-\item NA values
-\item 0 values
-\item Blank strings
-\item Infinite numbers
+\item NA values: NA
+\item 0 values: Zero
+\item Blank strings: Blank
+\item Infinite numbers: Inf
 }
-And, also any columns with only one distinct value, which means the column doesn't bring information to the table (If all rows are equal, why bother having that column?)
+}
+\details{
+All of these value are reported in columns prefixed by q (quantity), indicating the rows with the anomaly, and p (percentage), indicating percent of total rows with the anomaly.
+
+And, also any columns with only one distinct value, which means the column doesn't bring information to the table (If all rows are equal, why bother having that column?). We report the number of distinct values in qDistinct.
 }
 \examples{
 

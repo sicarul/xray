@@ -78,14 +78,17 @@ distributions <- function(data_analyze, outdir) {
         if(nrow(topten) > 10){
           topten=head(topten, 10)
           warning(paste0("On variable ", varName, ", more than 10 distinct variables found, only using top 10 for visualization."))
+          others = anti_join(varAnalyze, topten, by='dat') %>%
+            count() %>% mutate(dat='Others') %>% select(dat, n)
         }
 
-        others = anti_join(varAnalyze, topten, by='dat') %>%
-          count() %>% mutate(dat='Others') %>% select(dat, n)
         grouped = group_by(varAnalyze, dat) %>%
           semi_join(topten, by='dat') %>%
-          count() %>% arrange(-n) %>% ungroup() %>%
-          rbind(others)
+          count() %>% arrange(-n) %>% ungroup()
+
+        if(nrow(topten)>10){
+          grouped = rbind(grouped, others)
+        }
 
         ggplot(grouped, aes(x=dat, y=n, fill=dat)) +
           geom_bar(stat='identity', show.legend = FALSE) +

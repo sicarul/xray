@@ -102,19 +102,22 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
 
         varAnalyze = data.frame(dat=as.character(data_analyze[[varName]]), date=dateData)
         topten = group_by(varAnalyze, dat) %>% count() %>% arrange(-n) %>% ungroup()
+
         if(nrow(topten) > 10){
           topten=head(topten, 10)
           warning(paste0("On variable ", varName, ", more than 10 distinct variables found, only using top 10 for visualization."))
+          others = anti_join(varAnalyze, topten, by='dat') %>%
+            group_by(date) %>% count() %>% ungroup() %>%
+            mutate(dat='Others') %>% select(date, dat, n)
         }
 
-        others = anti_join(varAnalyze, topten, by='dat') %>%
-          group_by(date) %>% count() %>% ungroup() %>%
-          mutate(dat='Others') %>% select(date, dat, n)
         grouped = group_by(varAnalyze, date, dat) %>%
           semi_join(topten, by='dat') %>%
-          count() %>% arrange(date, -n) %>% ungroup() %>%
-          rbind(others)
+          count() %>% arrange(date, -n) %>% ungroup()
 
+        if(nrow(topten)>10){
+          grouped = rbind(grouped, others)
+        }
 
         abbr = function (x) {return (abbreviate(x, minlength = 10))}
 

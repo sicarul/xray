@@ -32,28 +32,28 @@ xray::anomalies(badLongley)
 #> Warning in xray::anomalies(badLongley): Found 1 possible problematic variables: 
 #> GNP
 #> $variables
-#>       Variable  q qNA pNA qZero pZero qBlank pBlank qInf pInf qDistinct
-#> 1          GNP 16  16   1     0     0      0      0    0    0         1
-#> 2 GNP.deflator 16   0   0     0     0      0      0    0    0        16
-#> 3   Unemployed 16   0   0     0     0      0      0    0    0        16
-#> 4 Armed.Forces 16   0   0     0     0      0      0    0    0        16
-#> 5   Population 16   0   0     0     0      0      0    0    0        16
-#> 6         Year 16   0   0     0     0      0      0    0    0        16
-#> 7     Employed 16   0   0     0     0      0      0    0    0        16
+#>       Variable  q qNA  pNA qZero pZero qBlank pBlank qInf pInf qDistinct
+#> 1          GNP 16  16 100%     0     -      0      -    0    -         1
+#> 2 GNP.deflator 16   0    -     0     -      0      -    0    -        16
+#> 3   Unemployed 16   0    -     0     -      0      -    0    -        16
+#> 4 Armed.Forces 16   0    -     0     -      0      -    0    -        16
+#> 5   Population 16   0    -     0     -      0      -    0    -        16
+#> 6         Year 16   0    -     0     -      0      -    0    -        16
+#> 7     Employed 16   0    -     0     -      0      -    0    -        16
 #>      type anomalous_percent
-#> 1 Logical                 1
-#> 2 Numeric                 0
-#> 3 Numeric                 0
-#> 4 Numeric                 0
-#> 5 Numeric                 0
-#> 6 Integer                 0
-#> 7 Numeric                 0
+#> 1 Logical              100%
+#> 2 Numeric                 -
+#> 3 Numeric                 -
+#> 4 Numeric                 -
+#> 5 Numeric                 -
+#> 6 Integer                 -
+#> 7 Numeric                 -
 #> 
 #> $problem_variables
-#>   Variable  q qNA pNA qZero pZero qBlank pBlank qInf pInf qDistinct
-#> 1      GNP 16  16   1     0     0      0      0    0    0         1
+#>   Variable  q qNA  pNA qZero pZero qBlank pBlank qInf pInf qDistinct
+#> 1      GNP 16  16 100%     0     -      0      -    0    -         1
 #>      type anomalous_percent
-#> 1 Logical                 1
+#> 1 Logical              100%
 #>                                                              problems
 #> 1 Anomalies present in 100% of the rows. Less than 2 distinct values.
 ```
