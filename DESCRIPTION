@@ -9,7 +9,7 @@ BugReports: https://github.com/sicarul/xray/issues
 Depends:
     R (>= 3.4.0)
 Imports:
-    dplyr,
+    dplyr (>= 0.7.0),
     scales,
     foreach,
     ggplot2,
