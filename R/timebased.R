@@ -29,24 +29,24 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
 
   dateData = data_analyze[[date_variable]]
 
-  if('POSIXct' %in% class(dateData) | 'POSIXlt' %in% class(dateData)){
+  if(inherits(dateData, 'POSIXct') || inherits(dateData, 'POSIXlt')){
     # Remove timezone
     attr(dateData, "tzone") <- "UTC"
 
-  }else if(! 'Date' %in% class(dateData)){
+  }else if(! inherits(dateData, 'Date')){
     # Not a Date nor a POSIXct/POSIXlt, what are you giving me?
 
-    if('character' %in% class(dateData) | 'factor' %in% class(dateData)){ #Try to convert strings
+    if(is.character(dateData) || is.factor(dateData)){ #Try to convert strings
       dateData = as.Date(as.character(dateData))
     }else{
-      warning('You need to specify a date variable as the second parameter')
+      warning('You need to specify a date variable as the second parameter.')
       return()
     }
   }
 
   #Determine time unit
   if(time_unit == 'auto'){
-    timeRange = as.double(difftime(max(dateData, na.rm=T), min(dateData, na.rm=T), units='secs'))
+    timeRange = as.double(difftime(max(dateData, na.rm=TRUE), min(dateData, na.rm=TRUE), units='secs'))
     min=60
     hour=min*60
     day=hour*24
@@ -65,19 +65,19 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
   # Start rolling baby!
   i=0
   resVars = c()
-  results = foreach::foreach(i=1:nrow(varMetadata)) %do% {
+  results = foreach::foreach(i=seq_len(nrow(varMetadata))) %do% {
     var=varMetadata[i,]
     varName=as.character(var$Variable)
     if(var$pNA=='100%'){
       #All null
-      warning(paste0("The variable ", varName, " is completely NA, can't plot that."))
+      warning("The variable ", varName, " is completely NA, can't plot that.")
       return()
     }else if(var$Variable == date_variable){
       #Do nothing when date var
       return()
     }else if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character')){
       #Do not try to plot anything
-      warning(paste0('Ignoring variable ', varName, ': Unsupported type for visualization'))
+      warning('Ignoring variable ', varName, ': Unsupported type for visualization.')
       return()
     }else{
       resVars=c(resVars,varName)
@@ -90,7 +90,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
         ylim1 = boxplot.stats(varAnalyze$dat)$stats[c(1, 5)]
 
         ggplot(varAnalyze, aes(date, dat)) +
-          geom_boxplot(fill='#ccccff', outlier.color = 'red', outlier.shape=1, na.rm=T) +
+          geom_boxplot(fill='#ccccff', outlier.color = 'red', outlier.shape=1, na.rm=TRUE) +
           theme_minimal() +
           labs(x = varName, y = "Rows") +
           coord_cartesian(ylim = ylim1*1.1) +
@@ -105,7 +105,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
 
         if(nrow(topten) > 10){
           topten=head(topten, 10)
-          warning(paste0("On variable ", varName, ", more than 10 distinct variables found, only using top 10 for visualization."))
+          warning("On variable ", varName, ", more than 10 distinct variables found, only using top 10 for visualization.")
           others = anti_join(varAnalyze, topten, by='dat') %>%
             group_by(date) %>% count() %>% ungroup() %>%
             mutate(dat='Others') %>% select(date, dat, n)
@@ -128,17 +128,17 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
           scale_fill_brewer(palette='Paired', label=abbr) +
           theme_minimal() +
           labs(x = var$Variable, y = "Rows", fill=varName) +
-          ggtitle(paste0("Evolution of variable ", varName)) +
+          ggtitle(paste("Evolution of variable", varName)) +
           theme(axis.text.x = element_text(angle = 45, hjust = 1))
       }
     }
 
   }
 
-  results[sapply(results, is.null)] <- NULL
+  results[vapply(results, is.null, logical(1))] <- NULL
   batches = ceiling(length(results)/4)
 
-  foreach::foreach(i=1:batches) %do% {
+  foreach::foreach(i=seq_len(batches)) %do% {
     firstPlot=((i-1)*4)+1
     lastPlot=min(firstPlot+3, length(results))
     if(lastPlot==firstPlot){
@@ -164,10 +164,10 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
 
 
   if(!missing(outdir)){
-    foreach::foreach(i=1:length(results)) %do% {
-      ggsave(filename=paste0(outdir, '/', gsub('[^a-z0-9 ]','_', tolower(resVars[[i]])), '.png'), plot=results[[i]])
+    foreach::foreach(i=seq_along(results)) %do% {
+      ggsave(filename=file.path(outdir, paste0(gsub('[^a-z0-9 ]','_', tolower(resVars[[i]])), '.png')), plot=results[[i]])
     }
   }
 
-  return(paste0(length(results), " charts have been generated."))
+  message(length(results), " charts have been generated.")
 }
