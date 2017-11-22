@@ -174,7 +174,7 @@ getColumnDescriptions <- function(df) {
     vapply(
       df,
       FUN = colToDescription,
-      logical(1)
+      character(1)
     )
   )
 }
