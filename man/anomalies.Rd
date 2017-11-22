@@ -25,6 +25,7 @@ And, also any columns with only one distinct value, which means the column doesn
 }
 \examples{
 
-xray::anomalies(mtcars, anomaly_threshold=0.5)
+library(xray)
+anomalies(mtcars, anomaly_threshold=0.5)
 
 }

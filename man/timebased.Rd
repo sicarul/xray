@@ -19,9 +19,9 @@ timebased(data_analyze, date_variable, time_unit = "auto", outdir)
 Analyze each variable in respect to a time variable
 }
 \examples{
-
+library(xray)
 data(longley)
 longley$Year=as.Date(paste0(longley$Year,'-01-01'))
-xray::timebased(longley, 'Year')
+timebased(longley, 'Year')
 
 }

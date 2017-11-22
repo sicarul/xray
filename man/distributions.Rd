@@ -15,7 +15,7 @@ distributions(data_analyze, outdir)
 Also returns a table of all numeric variables describind it's percentiles 1, 10, 25, 50 (median), 75, 90 and 99.
 }
 \examples{
-
-xray::distributions(mtcars)
+library(xray)
+distributions(mtcars)
 
 }
