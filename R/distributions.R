@@ -7,8 +7,8 @@
 #'
 #'
 #' @examples
-#'
-#' xray::distributions(mtcars)
+#' library(xray)
+#' distributions(mtcars)
 #'
 #' @export
 #' @import dplyr

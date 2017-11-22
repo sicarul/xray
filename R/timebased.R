@@ -6,10 +6,10 @@
 #' @param outdir an optional output directory to save the resulting plots as png images
 #'
 #' @examples
-#'
+#' library(xray)
 #' data(longley)
 #' longley$Year=as.Date(paste0(longley$Year,'-01-01'))
-#' xray::timebased(longley, 'Year')
+#' timebased(longley, 'Year')
 #'
 #' @export
 #' @import dplyr

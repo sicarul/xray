@@ -15,7 +15,8 @@
 #'
 #' @examples
 #'
-#' xray::anomalies(mtcars, anomaly_threshold=0.5)
+#' library(xray)
+#' anomalies(mtcars, anomaly_threshold=0.5)
 #'
 #' @export
 #' @import dplyr
