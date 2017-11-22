@@ -1,7 +1,7 @@
 #' Analyze each variable in respect to a time variable
 #'
 #' @param data_analyze a data frame to analyze
-#' @param date_variable the variable that will be used to pivot all other variables
+#' @param date_variable the variable (length one character vector or bare expression) that will be used to pivot all other variables
 #' @param time_unit the time unit to use if not automatically
 #' @param outdir an optional output directory to save the resulting plots as png images
 #'
@@ -24,10 +24,13 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
   # Obtain metadata for the dataset
   varMetadata = suppressWarnings(anomalies(data_analyze)$variables)
 
+  # Handle bare unquoted expression
+  date_variable <- enquo(date_variable)
+
   # If it's remote, bring it home, and remove nulls
   data_analyze = filter(data_analyze, !is.na(!!date_variable)) %>%  collect()
 
-  dateData = data_analyze[[date_variable]]
+  dateData = pull(data_analyze, !! date_variable)
 
   if(inherits(dateData, 'POSIXct') || inherits(dateData, 'POSIXlt')){
     # Remove timezone
@@ -72,7 +75,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
       #All null
       warning("The variable ", varName, " is completely NA, can't plot that.")
       return()
-    }else if(var$Variable == date_variable){
+    }else if(var$Variable == quo_name(date_variable)) {
       #Do nothing when date var
       return()
     }else if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character')){
