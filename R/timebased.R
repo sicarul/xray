@@ -94,7 +94,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
           theme_minimal() +
           labs(x = varName, y = "Rows") +
           coord_cartesian(ylim = ylim1*1.1) +
-          ggtitle(paste0("Histogram of ", var$Variable)) +
+          ggtitle(paste("Histogram of", var$Variable)) +
           theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
       }else{

@@ -27,13 +27,13 @@ distributions <- function(data_analyze, outdir) {
   # Start rolling baby!
   i=0
   resVars = c()
-  results = foreach::foreach(i=1:nrow(varMetadata)) %do% {
+  results = foreach::foreach(i=seq_len(nrow(varMetadata))) %do% {
     var=varMetadata[i,]
     varName=as.character(var$Variable)
 
     #Ignore unsupported types
     if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character')){
-      warning(paste0('Ignoring variable ', varName, ': Unsupported type for visualization'))
+      warning('Ignoring variable ', varName, ': Unsupported type for visualization.')
     }else{
       resVars=c(resVars,as.character(varName))
 
@@ -54,11 +54,11 @@ distributions <- function(data_analyze, outdir) {
             geom_histogram(aes(y=..density..), bins=bins,show.legend = FALSE, col='grey', fill='#5555ee') +
             scale_fill_discrete(h = c(180, 250), l=50) +
             stat_function(fun = dnorm,
-                                   args = list(mean = mean(varAnalyze$dat, na.rm=T), sd = sd(varAnalyze$dat, na.rm=T)),
+                                   args = list(mean = mean(varAnalyze$dat, na.rm=TRUE), sd = sd(varAnalyze$dat, na.rm=TRUE)),
                                    col = 'red') +
             theme_minimal() +
             labs(x = varName, y = "Rows") +
-            ggtitle(paste0("Histogram of ", varName))
+            ggtitle(paste("Histogram of", varName))
 
         }else{
           # Plot a bar chart if less than or equal to 10 distinct values
@@ -68,7 +68,7 @@ distributions <- function(data_analyze, outdir) {
             scale_fill_discrete(h = c(180, 250), l=50) +
             theme_minimal() +
             labs(x = varName, y = "Rows") +
-            ggtitle(paste0("Bar Chart of ", varName)) +
+            ggtitle(paste("Bar Chart of", varName)) +
             theme(axis.text.x = element_text(angle = 45, hjust = 1))
         }
       }else{
@@ -77,7 +77,7 @@ distributions <- function(data_analyze, outdir) {
         topten = group_by(varAnalyze, dat) %>% count() %>% arrange(-n)
         if(nrow(topten) > 10){
           topten=head(topten, 10)
-          warning(paste0("On variable ", varName, ", more than 10 distinct variables found, only using top 10 for visualization."))
+          warning("On variable ", varName, ", more than 10 distinct variables found, only using top 10 for visualization.")
           others = anti_join(varAnalyze, topten, by='dat') %>%
             count() %>% mutate(dat='Others') %>% select(dat, n)
         }
@@ -103,10 +103,10 @@ distributions <- function(data_analyze, outdir) {
 
   }
 
-  results[sapply(results, is.null)] <- NULL
+  results[vapply(results, is.null, logical(1))] <- NULL
   batches = ceiling(length(results)/4)
 
-  foreach::foreach(i=1:batches) %do% {
+  foreach::foreach(i=seq_len(batches)) %do% {
     firstPlot=((i-1)*4)+1
     lastPlot=min(firstPlot+3, length(results))
     if(lastPlot==firstPlot){
@@ -132,12 +132,12 @@ distributions <- function(data_analyze, outdir) {
 
 
   if(!missing(outdir)){
-    foreach::foreach(i=1:length(results)) %do% {
-      ggsave(filename=paste0(outdir, '/', gsub('[^a-z0-9 ]','_', tolower(resVars[[i]])), '.png'), plot=results[[i]])
+    foreach::foreach(i=seq_along(results)) %do% {
+      ggsave(filename=file.path(outdir, paste0(gsub('[^a-z0-9 ]','_', tolower(resVars[[i]])), '.png')), plot=results[[i]])
     }
   }
 
-  distTable=foreach::foreach(i=1:nrow(varMetadata), .combine=rbind) %do% {
+  distTable=foreach::foreach(i=seq_len(nrow(varMetadata)), .combine=rbind) %do% {
     var=varMetadata[i,]
     varName=as.character(var$Variable)
     if(var$type %in% c('Integer', 'Numeric')){
