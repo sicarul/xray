@@ -26,7 +26,7 @@
 anomalies <- function(data_analyze,
                       anomaly_threshold = 0.8,
                       distinct_threshold = 2) {
-  if(anomaly_threshold < 0 | anomaly_threshold > 1){
+  if(anomaly_threshold < 0 || anomaly_threshold > 1){
     warning("anomaly_threshold can be between 0 and 1, which mean 0% and 100%.")
     return()
   }
@@ -36,7 +36,7 @@ anomalies <- function(data_analyze,
 
 
   # Check for anomalies by column and summarize them
-  if('tbl_sql' %in% class(data_analyze)){
+  if(inherits(data_analyze, 'tbl_sql')){
     # Special treatment for SQL sources so it works even when it's a dplyr connected dataset (created with tbl(...))
     analyze = data_analyze %>%
       mutate_all(funs(as.character)) %>%
@@ -129,10 +129,9 @@ anomalies <- function(data_analyze,
 
   # Detect problematic variables
   problem_vars = filter(finalReport, anomalous_percent > anomaly_threshold | qDistinct < distinct_threshold) %>%
-    mutate(problems=trimws(paste(
+    mutate(problems=trimws(paste0(
       ifelse(anomalous_percent > anomaly_threshold, paste0('Anomalies present in ', xpercent(anomalous_percent), ' of the rows. '),''),
-      ifelse(qDistinct < distinct_threshold, paste0('Less than ', distinct_threshold, ' distinct values. '),''),
-      sep=''
+      ifelse(qDistinct < distinct_threshold, paste0('Less than ', distinct_threshold, ' distinct values. '),'')
     ))) %>%
     mutate_at(c('pNA', 'pZero','pBlank','pInf', 'anomalous_percent')
               , xpercent)
@@ -142,7 +141,7 @@ anomalies <- function(data_analyze,
                           , xpercent)
 
   if(nrow(problem_vars) > 0){
-    warning(paste0("Found ", nrow(problem_vars), ' possible problematic variables: \n', paste0(problem_vars$Variable, collapse=', ')))
+    warning("Found ", nrow(problem_vars), ' possible problematic variables: \n', paste0(problem_vars$Variable, collapse=', '))
   }
 
   # Return the result
@@ -156,41 +155,26 @@ anomalies <- function(data_analyze,
 
 
 colToDescription <- function(col) {
-  class = class(col)[[1]]
-  switch(class,
-         logical = {
-           return('Logical')
-         },
-         numeric = {
-           return('Numeric')
-         },
-         integer = {
-           return('Integer')
-         },
-         Date = {
-           return('Date')
-         },
-         POSIXct = {
-           return('Timestamp')
-         },
-         POSIXlt = {
-           return('Timestamp')
-         },
-         factor = {
-           return("Factor")
-         },
-         character = {
-           return("Character")
-         }
+  col_class = class(col)[[1]]
+  switch(col_class,
+         logical = 'Logical',
+         numeric = 'Numeric',
+         integer = 'Integer',
+         Date = 'Date',
+         POSIXct = 'Timestamp',
+         POSIXlt = 'Timestamp',
+         factor = "Factor",
+         character = "Character",
+         "Unknown"
   )
-  return("Unknown")
 }
 
 getColumnDescriptions <- function(df) {
   return(
-    sapply(
+    vapply(
       df,
-      FUN = colToDescription
+      FUN = colToDescription,
+      logical(1)
     )
   )
 }
