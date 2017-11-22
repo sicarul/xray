@@ -86,22 +86,29 @@ anomalies <- function(data_analyze,
   for(var in varNames){
     outRow = data.frame(Variable=var)
 
-    q=analyze[[paste0(var,'_q')]]
+
+    if(ncol(data_analyze)==1){
+      prefix=''
+    }else{
+      prefix=paste0(var,'_')
+    }
+
+    q=analyze[[paste0(prefix,'q')]]
     outRow$q=q
 
-    outRow$qNA=analyze[[paste0(var,'_qNA')]]
+    outRow$qNA=analyze[[paste0(prefix,'qNA')]]
     outRow$pNA=outRow$qNA/q
 
-    outRow$qZero=analyze[[paste0(var,'_qZero')]]
+    outRow$qZero=analyze[[paste0(prefix,'qZero')]]
     outRow$pZero=outRow$qZero/q
 
-    outRow$qBlank=analyze[[paste0(var,'_qBlank')]]
+    outRow$qBlank=analyze[[paste0(prefix,'qBlank')]]
     outRow$pBlank=outRow$qBlank/q
 
-    outRow$qInf=analyze[[paste0(var,'_qInf')]]
+    outRow$qInf=analyze[[paste0(prefix,'qInf')]]
     outRow$pInf=outRow$qInf/q
 
-    outRow$qDistinct=analyzeDistinct[[paste0(var,'_qDistinct')]]
+    outRow$qDistinct=analyzeDistinct[[paste0(prefix,'qDistinct')]]
 
 
     if(ncol(analyzeOut)==0){
