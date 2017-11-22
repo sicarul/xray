@@ -68,7 +68,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
   results = foreach::foreach(i=1:nrow(varMetadata)) %do% {
     var=varMetadata[i,]
     varName=as.character(var$Variable)
-    if(var$pNA==1){
+    if(var$pNA=='100%'){
       #All null
       warning(paste0("The variable ", varName, " is completely NA, can't plot that."))
       return()

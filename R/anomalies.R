@@ -1,13 +1,16 @@
 #' Analyze a dataset and search for anomalies
 #'
-#' If any anomalous columns are found, they are reported as a warning and returned in a data.frame. The anomalies we try to detect are high percentages of:
+#' If any anomalous columns are found, they are reported as a warning and returned in a data.frame. To interpret the output, we are getting these anomalies:
 #' \itemize{
-#' \item NA values
-#' \item 0 values
-#' \item Blank strings
-#' \item Infinite numbers
+#' \item NA values: NA
+#' \item 0 values: Zero
+#' \item Blank strings: Blank
+#' \item Infinite numbers: Inf
 #' }
-#' And, also any columns with only one distinct value, which means the column doesn't bring information to the table (If all rows are equal, why bother having that column?)
+#'
+#' All of these value are reported in columns prefixed by q (quantity), indicating the rows with the anomaly, and p (percentage), indicating percent of total rows with the anomaly.
+#'
+#' And, also any columns with only one distinct value, which means the column doesn't bring information to the table (If all rows are equal, why bother having that column?). We report the number of distinct values in qDistinct.
 #'
 #' @param data_analyze a data frame or tibble to analyze
 #' @param anomaly_threshold the minimum percentage of anomalous rows for the column to be problematic
@@ -97,16 +100,16 @@ anomalies <- function(data_analyze,
     outRow$q=q
 
     outRow$qNA=analyze[[paste0(prefix,'qNA')]]
-    outRow$pNA=outRow$qNA/q
+    outRow$pNA=as.double(outRow$qNA/q)
 
     outRow$qZero=analyze[[paste0(prefix,'qZero')]]
-    outRow$pZero=outRow$qZero/q
+    outRow$pZero=as.double(outRow$qZero/q)
 
     outRow$qBlank=analyze[[paste0(prefix,'qBlank')]]
-    outRow$pBlank=outRow$qBlank/q
+    outRow$pBlank=as.double(outRow$qBlank/q)
 
     outRow$qInf=analyze[[paste0(prefix,'qInf')]]
-    outRow$pInf=outRow$qInf/q
+    outRow$pInf=as.double(outRow$qInf/q)
 
     outRow$qDistinct=analyzeDistinct[[paste0(prefix,'qDistinct')]]
 
@@ -120,17 +123,23 @@ anomalies <- function(data_analyze,
   descriptions = getColumnDescriptions(data_analyze)
   analyzeOut$type=descriptions
   # Calculate percent anomalous
-  finalReport = analyzeOut %>% mutate(
-    anomalous_percent=pNA+pZero+pBlank+pInf
-  ) %>% arrange(-anomalous_percent, qDistinct)
+  finalReport = analyzeOut %>%
+    mutate(anomalous_percent=pNA+pZero+pBlank+pInf) %>%
+    arrange(-anomalous_percent, qDistinct)
 
   # Detect problematic variables
   problem_vars = filter(finalReport, anomalous_percent > anomaly_threshold | qDistinct < distinct_threshold) %>%
     mutate(problems=trimws(paste(
-      ifelse(anomalous_percent > anomaly_threshold, paste0('Anomalies present in ', scales::percent(anomalous_percent), ' of the rows. '),''),
+      ifelse(anomalous_percent > anomaly_threshold, paste0('Anomalies present in ', xpercent(anomalous_percent), ' of the rows. '),''),
       ifelse(qDistinct < distinct_threshold, paste0('Less than ', distinct_threshold, ' distinct values. '),''),
       sep=''
-    )))
+    ))) %>%
+    mutate_at(c('pNA', 'pZero','pBlank','pInf', 'anomalous_percent')
+              , xpercent)
+
+  finalReport = mutate_at(finalReport,
+                          c('pNA', 'pZero','pBlank','pInf', 'anomalous_percent')
+                          , xpercent)
 
   if(nrow(problem_vars) > 0){
     warning(paste0("Found ", nrow(problem_vars), ' possible problematic variables: \n', paste0(problem_vars$Variable, collapse=', ')))
@@ -184,4 +193,8 @@ getColumnDescriptions <- function(df) {
       FUN = colToDescription
     )
   )
+}
+
+xpercent = function(x){
+  ifelse(x==0, '-',paste0(round(x*100,2), '%'))
 }
