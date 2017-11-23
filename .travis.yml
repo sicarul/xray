@@ -1,0 +1,13 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+sudo: false
+cache: packages
+env:
+  global:
+    - WARNINGS_ARE_ERRORS=1
+    - R_BUILD_ARGS=--no-manual
+    - R_CHECK_ARGS=--no-manual --as-cran
+r:
+  - release
+  - devel

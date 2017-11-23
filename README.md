@@ -3,6 +3,8 @@
 xray
 ====
 
+[![Travis-CI Build Status](https://travis-ci.org/sicarul/xray.svg?branch=master)](https://travis-ci.org/sicarul/xray)
+
 The R Package to have X Ray vision on your datasets. This package lets you analyze the variables of a dataset, to evaluate how is the shape of your data. Consider this the first step when you have your data for modeling, you can use this package to analyze all variables and check if there is anything weird worth transforming or even avoiding the variable altogether.
 
 Installation
@@ -101,6 +103,8 @@ ndateLongley$Data='Offseted'
 xray::timebased(rbind(dateLongley, ndateLongley), 'Year')
 ```
 
-![](tools/README-example-timebased-1.png)![](tools/README-example-timebased-2.png)
+![](tools/README-example-timebased-1.png)
 
-    #> [1] "7 charts have been generated."
+    #> 7 charts have been generated.
+
+![](tools/README-example-timebased-2.png)
