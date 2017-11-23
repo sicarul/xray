@@ -4,7 +4,8 @@
 \alias{timebased}
 \title{Analyze each variable in respect to a time variable}
 \usage{
-timebased(data_analyze, date_variable, time_unit = "auto", outdir)
+timebased(data_analyze, date_variable, time_unit = "auto",
+  nvals_num_to_cat = 2, outdir)
 }
 \arguments{
 \item{data_analyze}{a data frame to analyze}
@@ -12,6 +13,8 @@ timebased(data_analyze, date_variable, time_unit = "auto", outdir)
 \item{date_variable}{the variable (length one character vector or bare expression) that will be used to pivot all other variables}
 
 \item{time_unit}{the time unit to use if not automatically}
+
+\item{nvals_num_to_cat}{numeric numeric values with this many or fewer distinct values will be treated as categorical}
 
 \item{outdir}{an optional output directory to save the resulting plots as png images}
 }

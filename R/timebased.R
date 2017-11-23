@@ -3,6 +3,7 @@
 #' @param data_analyze a data frame to analyze
 #' @param date_variable the variable (length one character vector or bare expression) that will be used to pivot all other variables
 #' @param time_unit the time unit to use if not automatically
+#' @param nvals_num_to_cat numeric numeric values with this many or fewer distinct values will be treated as categorical
 #' @param outdir an optional output directory to save the resulting plots as png images
 #'
 #' @examples
@@ -19,7 +20,8 @@
 #' @importFrom stats quantile
 #' @importFrom stats setNames
 #'
-timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
+timebased <- function(data_analyze, date_variable, time_unit="auto",
+                      nvals_num_to_cat=2,outdir) {
 
   # Obtain metadata for the dataset
   varMetadata = suppressWarnings(anomalies(data_analyze)$variables)
@@ -85,7 +87,8 @@ timebased <- function(data_analyze, date_variable, time_unit="auto", outdir) {
     }else{
       resVars=c(resVars,varName)
 
-      if(var$type %in% c('Integer', 'Numeric')){
+      if(var$type %in% c('Numeric','Integer') &
+         length(unique(data_analyze[[varName]]))>nvals_num_to_cat){
         # Box plot for visualizing difference in distribution among time
 
         varAnalyze = data.frame(dat=as.double(data_analyze[[varName]]), date=as.factor(dateData))
