@@ -74,9 +74,10 @@ distributions <- function(data_analyze, outdir) {
       }else{
         # Plot a grouped bar chart for character values
         varAnalyze = data.frame(dat=as.character(data_analyze[[varName]]))
-        topten = group_by(varAnalyze, dat) %>% count() %>% arrange(-n)
-        if(nrow(topten) > 10){
-          topten=head(topten, 10)
+        topvars = group_by(varAnalyze, dat) %>% count() %>% arrange(-n)
+        topten=topvars
+        if(nrow(topvars) > 10){
+          topten=head(topvars, 10)
           warning("On variable ", varName, ", more than 10 distinct variables found, only using top 10 for visualization.")
           others = anti_join(varAnalyze, topten, by='dat') %>%
             count() %>% mutate(dat='Others') %>% select(dat, n)
@@ -86,7 +87,7 @@ distributions <- function(data_analyze, outdir) {
           semi_join(topten, by='dat') %>%
           count() %>% arrange(-n) %>% ungroup()
 
-        if(nrow(topten)>10){
+        if(nrow(topvars)>10){
           grouped = rbind(grouped, others)
         }
 

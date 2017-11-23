@@ -9,7 +9,7 @@ timebased(data_analyze, date_variable, time_unit = "auto", outdir)
 \arguments{
 \item{data_analyze}{a data frame to analyze}
 
-\item{date_variable}{the variable that will be used to pivot all other variables}
+\item{date_variable}{the variable (length one character vector or bare expression) that will be used to pivot all other variables}
 
 \item{time_unit}{the time unit to use if not automatically}
 
