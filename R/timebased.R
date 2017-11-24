@@ -94,12 +94,13 @@ timebased <- function(data_analyze, date_variable, time_unit="auto",
         varAnalyze = data.frame(dat=as.double(data_analyze[[varName]]), date=as.factor(dateData))
 
         ylim1 = boxplot.stats(varAnalyze$dat)$stats[c(1, 5)]
+        yrange = ylim1[2]-ylim1[1]
 
         ggplot(varAnalyze, aes(date, dat)) +
           geom_boxplot(fill='#ccccff', outlier.color = 'red', outlier.shape=1, na.rm=TRUE) +
           theme_minimal() +
           labs(x = varName, y = "Rows") +
-          coord_cartesian(ylim = ylim1*1.1) +
+          coord_cartesian(ylim = ylim1+c(-0.1*yrange,0.1*yrange)) +
           ggtitle(paste("Histogram of", var$Variable)) +
           theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
