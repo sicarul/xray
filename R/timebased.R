@@ -88,7 +88,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto",
       resVars=c(resVars,varName)
 
       if(var$type %in% c('Numeric','Integer') &
-         length(unique(data_analyze[[varName]]))>nvals_num_to_cat){
+         var$qDistinct > nvals_num_to_cat){
         # Box plot for visualizing difference in distribution among time
 
         varAnalyze = data.frame(dat=as.double(data_analyze[[varName]]), date=as.factor(dateData))
