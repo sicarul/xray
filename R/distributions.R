@@ -26,11 +26,12 @@ distributions <- function(data_analyze, outdir) {
 
   # Start rolling baby!
   i=0
+  pb <- txtProgressBar(0, nrow(varMetadata)) # Progress bar
   resVars = c()
   results = foreach::foreach(i=seq_len(nrow(varMetadata))) %do% {
     var=varMetadata[i,]
     varName=as.character(var$Variable)
-
+    setTxtProgressBar(pb, i)
     #Ignore unsupported types
     if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character')){
       warning('Ignoring variable ', varName, ': Unsupported type for visualization.')
@@ -103,6 +104,7 @@ distributions <- function(data_analyze, outdir) {
     }
 
   }
+  close(pb)
 
   results[vapply(results, is.null, logical(1))] <- NULL
   batches = ceiling(length(results)/4)

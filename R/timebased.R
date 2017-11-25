@@ -69,10 +69,12 @@ timebased <- function(data_analyze, date_variable, time_unit="auto",
 
   # Start rolling baby!
   i=0
+  pb <- txtProgressBar(0, nrow(varMetadata)) # Progress bar
   resVars = c()
   results = foreach::foreach(i=seq_len(nrow(varMetadata))) %do% {
     var=varMetadata[i,]
     varName=as.character(var$Variable)
+    setTxtProgressBar(pb, i)
     if(var$pNA=='100%'){
       #All null
       warning("The variable ", varName, " is completely NA, can't plot that.")
@@ -140,6 +142,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto",
     }
 
   }
+  close(pb)
 
   results[vapply(results, is.null, logical(1))] <- NULL
   batches = ceiling(length(results)/4)
