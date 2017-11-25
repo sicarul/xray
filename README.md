@@ -68,6 +68,7 @@ xray::anomalies(badLongley)
 distrLongley=longley
 distrLongley$testCategorical=c(rep('One',7), rep('Two', 9))
 xray::distributions(distrLongley)
+#> ===========================================================================
 ```
 
 ![](tools/README-example-distributions-1.png)![](tools/README-example-distributions-2.png)
@@ -101,6 +102,7 @@ ndateLongley=dateLongley
 ndateLongley$GNP=dateLongley$GNP+10
 ndateLongley$Data='Offseted'
 xray::timebased(rbind(dateLongley, ndateLongley), 'Year')
+#> ===========================================================================
 ```
 
 ![](tools/README-example-timebased-1.png)
