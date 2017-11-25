@@ -149,7 +149,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto",
 
   foreach::foreach(i=seq_len(batches)) %do% {
     firstPlot=((i-1)*4)+1
-    lastPlot=min(firstPlot+3, length(results))
+    lastPlot=min(firstPlot+3, length(results), na.rm=T)
     if(lastPlot==firstPlot){
       plot(results[[firstPlot]])
     }else{

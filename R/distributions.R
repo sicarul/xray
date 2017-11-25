@@ -41,7 +41,7 @@ distributions <- function(data_analyze, outdir) {
       if(var$type %in% c('Integer', 'Numeric')){
 
         varAnalyze = data.frame(dat=as.double(data_analyze[[varName]]))
-        range=max(varAnalyze$dat)-min(varAnalyze$dat)
+        range=max(varAnalyze$dat,na.rm=T)-min(varAnalyze$dat,na.rm=T)
 
         # Histogram for numeric variables with at least 10 distinct values
         if(var$qDistinct > 10){
@@ -111,7 +111,7 @@ distributions <- function(data_analyze, outdir) {
 
   foreach::foreach(i=seq_len(batches)) %do% {
     firstPlot=((i-1)*4)+1
-    lastPlot=min(firstPlot+3, length(results))
+    lastPlot=min(firstPlot+3, length(results), na.rm=T)
     if(lastPlot==firstPlot){
       plot(results[[firstPlot]])
     }else{
@@ -146,7 +146,7 @@ distributions <- function(data_analyze, outdir) {
     if(var$type %in% c('Integer', 'Numeric')){
       data.frame(
         cbind(varName,
-              t(round(quantile(data_analyze[[varName]], probs=c(.01, .1, .25, .5, .75, .9, .99)), 4))
+              t(round(quantile(data_analyze[[varName]], probs=c(.01, .1, .25, .5, .75, .9, .99), na.rm=T), 4))
       ))
     }
   }
