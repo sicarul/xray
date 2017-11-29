@@ -19,6 +19,8 @@
 #' @importFrom utils head
 #' @importFrom stats quantile
 #' @importFrom stats setNames
+#' @importFrom utils setTxtProgressBar
+#' @importFrom utils txtProgressBar
 #'
 timebased <- function(data_analyze, date_variable, time_unit="auto",
                       nvals_num_to_cat=2,outdir) {

@@ -4,12 +4,14 @@
 \alias{distributions}
 \title{Analyze each variable and generate a histogram describing it's distribution.}
 \usage{
-distributions(data_analyze, outdir)
+distributions(data_analyze, outdir, charts = T)
 }
 \arguments{
 \item{data_analyze}{a data frame to analyze}
 
 \item{outdir}{an optional output directory to save the resulting plots as png images}
+
+\item{charts}{set this to false to avoid generating charts, useful for batch script usage}
 }
 \description{
 Also returns a table of all numeric variables describind it's percentiles 1, 10, 25, 50 (median), 75, 90 and 99.

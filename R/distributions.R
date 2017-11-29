@@ -4,6 +4,7 @@
 #'
 #' @param data_analyze a data frame to analyze
 #' @param outdir an optional output directory to save the resulting plots as png images
+#' @param charts set this to false to avoid generating charts, useful for batch script usage
 #'
 #'
 #' @examples
@@ -16,6 +17,8 @@
 #' @importFrom graphics plot
 #' @importFrom stats dnorm
 #' @importFrom stats sd
+#' @importFrom utils setTxtProgressBar
+#' @importFrom utils txtProgressBar
 distributions <- function(data_analyze, outdir, charts=T) {
 
   # Obtain metadata for the dataset
