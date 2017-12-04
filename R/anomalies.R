@@ -49,11 +49,11 @@ anomalies <- function(data_analyze,
         )
       ))%>%
       summarize_all(funs(
-        qNA=sum(ifelse(.=='NA', 1,0)),
-        qZero=sum(ifelse(.=='Zero', 1,0)),
-        qBlank=sum(ifelse(.=='Blank', 1,0)),
-        qValues=sum(ifelse(.=='Value', 1,0)),
-        qInf=sum(ifelse(.=='Infinite', 1,0)),
+        qNA=sum(.=='NA'),
+        qZero=sum(.=='Zero'),
+        qBlank=sum(.=='Blank'),
+        qValues=sum(.=='Value'),
+        qInf=sum(.=='Infinite'),
         q=n()
       )) %>% collect()
   }else{
