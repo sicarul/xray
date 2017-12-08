@@ -21,11 +21,17 @@
 #' @importFrom utils txtProgressBar
 distributions <- function(data_analyze, outdir, charts=T) {
 
+
+  # If it's remote, bring it home
+  if(inherits(data_analyze, 'tbl_sql')){
+    # Collect up to 100k samples
+    print("Remote data source, collecting up to 100k sample rows")
+    data_analyze = collect(data_analyze, n=100000)
+  }
+
   # Obtain metadata for the dataset
   varMetadata = suppressWarnings(anomalies(data_analyze)$variables)
 
-  # If it's remote, bring it home
-  data_analyze = collect(data_analyze)
 
   if(charts==T){
     # Start rolling baby!

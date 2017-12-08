@@ -31,33 +31,15 @@ anomalies <- function(data_analyze,
     return()
   }
 
+
+  if(inherits(data_analyze, 'tbl_sql')){
+    # Collect up to 100k samples
+    print("Remote data source, collecting up to 100k sample rows")
+    data_analyze = collect(data_analyze, n=100000)
+  }
   varNames = names(data_analyze)
 
-
-
   # Check for anomalies by column and summarize them
-  if(inherits(data_analyze, 'tbl_sql')){
-    # Special treatment for SQL sources so it works even when it's a dplyr connected dataset (created with tbl(...))
-    analyze = data_analyze %>%
-      mutate_all(funs(as.character)) %>%
-      mutate_all(funs(
-        case_when(
-          is.na(.) ~ 'NA',
-          . == '0' ~ 'Zero',
-          . == '' ~ 'Blank',
-          TRUE ~ 'Value'
-        )
-      ))%>%
-      summarize_all(funs(
-        qNA=sum(.=='NA'),
-        qZero=sum(.=='Zero'),
-        qBlank=sum(.=='Blank'),
-        qValues=sum(.=='Value'),
-        qInf=sum(.=='Infinite'),
-        q=n()
-      )) %>% collect()
-  }else{
-    # Local Data Frame or unknown type of dataset, let's hope it works
     analyze = data_analyze %>%
       mutate_all(funs(
         case_when(
@@ -76,7 +58,6 @@ anomalies <- function(data_analyze,
         qInf=sum(.=='Infinite'),
         q=n()
       )) %>% collect()
-  }
 
   # Distinct amount of values inside each column
   analyzeDistinct = data_analyze %>%

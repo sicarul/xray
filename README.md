@@ -3,14 +3,20 @@
 xray
 ====
 
-[![Travis-CI Build Status](https://travis-ci.org/sicarul/xray.svg?branch=master)](https://travis-ci.org/sicarul/xray)
+[![Travis-CI Build Status](https://travis-ci.org/sicarul/xray.svg?branch=master)](https://travis-ci.org/sicarul/xray) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/xray)](https://cran.r-project.org/package=xray) [![CRAN\_Downloads\_Badge](https://cranlogs.r-pkg.org/badges/xray)](https://cran.r-project.org/package=xray)
 
-The R Package to have X Ray vision on your datasets. This package lets you analyze the variables of a dataset, to evaluate how is the shape of your data. Consider this the first step when you have your data for modeling, you can use this package to analyze all variables and check if there is anything weird worth transforming or even avoiding the variable altogether.
+The R Package to have X Ray vision on your datasets. This package lets you analyze the variables of a dataset, to evaluate how is your data shaped. Consider this the first step when you have your data for modeling, you can use this package to analyze all variables and check if there is anything weird worth transforming or even avoiding the variable altogether.
 
 Installation
 ------------
 
-You can install xray from github with:
+You can install the stable version of xray from CRAN with:
+
+``` r
+install.packages("xray")
+```
+
+Or the latest dev version from Github:
 
 ``` r
 # install.packages("devtools")

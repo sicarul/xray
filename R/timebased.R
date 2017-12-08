@@ -25,16 +25,20 @@
 timebased <- function(data_analyze, date_variable, time_unit="auto",
                       nvals_num_to_cat=2,outdir) {
 
+
+  # Remove nulls
+  data_analyze = filter(data_analyze, !is.na(!!date_variable))
+
+  if(inherits(data_analyze, 'tbl_sql')){
+    # Collect up to 100k samples
+    print("Remote data source, collecting up to 100k sample rows")
+    data_analyze = collect(data_analyze, n=100000)
+  }
+
   # Obtain metadata for the dataset
   varMetadata = suppressWarnings(anomalies(data_analyze)$variables)
 
-  # Handle bare unquoted expression
-  date_variable <- enquo(date_variable)
-
-  # If it's remote, bring it home, and remove nulls
-  data_analyze = filter(data_analyze, !is.na(!!date_variable)) %>%  collect()
-
-  dateData = pull(data_analyze, !! date_variable)
+  dateData = pull(data_analyze, date_variable)
 
   if(inherits(dateData, 'POSIXct') || inherits(dateData, 'POSIXlt')){
     # Remove timezone
