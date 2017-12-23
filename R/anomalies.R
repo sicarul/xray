@@ -141,12 +141,14 @@ colToDescription <- function(col) {
          logical = 'Logical',
          numeric = 'Numeric',
          integer = 'Integer',
+         integer64 = 'Integer',
          Date = 'Date',
          POSIXct = 'Timestamp',
          POSIXlt = 'Timestamp',
          factor = "Factor",
+         ordered = "Ordered Factor",
          character = "Character",
-         "Unknown"
+         paste0("Unknown (",col_class,")")
   )
 }
 

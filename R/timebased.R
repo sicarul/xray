@@ -88,7 +88,7 @@ timebased <- function(data_analyze, date_variable, time_unit="auto",
     }else if(var$Variable == quo_name(date_variable)) {
       #Do nothing when date var
       return()
-    }else if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character')){
+    }else if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character', 'Ordered Factor')){
       #Do not try to plot anything
       warning('Ignoring variable ', varName, ': Unsupported type for visualization.')
       return()

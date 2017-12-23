@@ -43,7 +43,7 @@ distributions <- function(data_analyze, outdir, charts=T) {
       varName=as.character(var$Variable)
       setTxtProgressBar(pb, i)
       #Ignore unsupported types
-      if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character')){
+      if(!var$type %in% c('Integer', 'Logical', 'Numeric', 'Factor', 'Character', 'Ordered Factor')){
         warning('Ignoring variable ', varName, ': Unsupported type for visualization.')
       }else{
         resVars=c(resVars,as.character(varName))
@@ -168,8 +168,17 @@ distributions <- function(data_analyze, outdir, charts=T) {
       ))
     }
   }
-  distTable=setNames(distTable, c('Variable', 'p_1', 'p_10', 'p_25', 'p_50', 'p_75', 'p_90', 'p_99'))
 
-  distTable
+
+  if(!is.null(distTable)){
+    distTable=setNames(distTable, c('Variable', 'p_1', 'p_10', 'p_25', 'p_50', 'p_75', 'p_90', 'p_99'))
+    distTable
+  }else{
+    # If no numeric variables, will not report on percentiles
+    data.frame(Variable=as.character(), p_1=as.numeric(), p_10=as.numeric(), p_25=as.numeric(), p_50=as.numeric(), p_75=as.numeric(), p_90=as.numeric(), p_99=as.numeric())
+  }
+
+
+
 
 }
