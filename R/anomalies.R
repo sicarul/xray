@@ -68,7 +68,7 @@ anomalies <- function(data_analyze,
   # Generate summary
   analyzeOut=data.frame()
   for(var in varNames){
-    outRow = data.frame(Variable=var)
+    outRow = data.frame(Variable=var, stringsAsFactors = F)
 
 
     if(ncol(data_analyze)==1){

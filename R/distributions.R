@@ -73,18 +73,21 @@ distributions <- function(data_analyze, outdir, charts=T) {
 
           }else{
             # Plot a bar chart if less than or equal to 10 distinct values
-            varAnalyze = data.frame(dat=as.character(data_analyze[[varName]]))
-            ggplot(varAnalyze, aes(dat, fill=dat)) +
+            varAnalyze = data.frame(dat=as.character(data_analyze[[varName]]), stringsAsFactors = F)
+            graph = ggplot(varAnalyze, aes(dat, fill=dat)) +
               geom_bar(show.legend = FALSE) +
               scale_fill_discrete(h = c(180, 250), l=50) +
               theme_minimal() +
               labs(x = varName, y = "Rows") +
-              ggtitle(paste("Bar Chart of", varName)) +
-              theme(axis.text.x = element_text(angle = 45, hjust = 1))
+              ggtitle(paste("Bar Chart of", varName))
+            if(max(nchar(varAnalyze$dat)) > 4){
+              graph = graph + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+            }
+            graph
           }
         }else{
           # Plot a grouped bar chart for character values
-          varAnalyze = data.frame(dat=as.character(data_analyze[[varName]]))
+          varAnalyze = data.frame(dat=as.character(data_analyze[[varName]]), stringsAsFactors = F)
           topvars = group_by(varAnalyze, dat) %>% count() %>% arrange(-n)
           topten=topvars
           if(nrow(topvars) > 10){
@@ -102,14 +105,17 @@ distributions <- function(data_analyze, outdir, charts=T) {
             grouped = rbind(grouped, others)
           }
 
-          ggplot(grouped, aes(x=dat, y=n, fill=dat)) +
+          graph = ggplot(grouped, aes(x=dat, y=n, fill=dat)) +
             geom_bar(stat='identity', show.legend = FALSE) +
             coord_flip() +
             scale_fill_discrete(h = c(180, 250), l=50) +
             theme_minimal() +
             labs(x = varName, y = "Rows") +
-            ggtitle(paste0("Bar Chart of ", varName)) +
-            theme(axis.text.x = element_text(angle = 45, hjust = 1))
+            ggtitle(paste0("Bar Chart of ", varName))
+          if(max(nchar(grouped$dat)) > 4){
+            graph = graph + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+          }
+          graph
         }
       }
 
